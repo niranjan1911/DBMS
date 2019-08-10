@@ -1,0 +1,899 @@
+mllab24@mllab24:~$ sudo mysql -u Niranjan -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database myorder
+    -> ;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use myorder;
+Database changed
+mysql> create table customer(c_id int primary key,c_name varchar(20),phone int,email varchar(20));
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> create table ord(o_id int primary key,o_date date,amount int);
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> desc ord;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| o_id   | int(11) | NO   | PRI | NULL    |       |
+| o_date | date    | YES  |     | NULL    |       |
+| amount | int(11) | YES  |     | NULL    |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table product(p_id int primary key,p_name varchar(20),int u_price,int stock);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int u_price,int stock)' at line 1
+mysql> create table product(p_id int primary key,p_name varchar(20),u_price int,int stock);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int stock)' at line 1
+mysql> create table product(p_id int primary key,p_name varchar(20),u_price int,stock int);
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> desc product;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| p_id    | int(11)     | NO   | PRI | NULL    |       |
+| p_name  | varchar(20) | YES  |     | NULL    |       |
+| u_price | int(11)     | YES  |     | NULL    |       |
+| stock   | int(11)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table product(cat_id int primary key,cat_name varchar(20));
+ERROR 1050 (42S01): Table 'product' already exists
+mysql> create table category(cat_id int primary key,cat_name varchar(20));
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> desc category;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| cat_id   | int(11)     | NO   | PRI | NULL    |       |
+| cat_name | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table contain(
+    ->                      p_id int,
+    -> 
+Display all 772 possibilities? (y or n) 
+    ->                      o_id int,
+    ->                      int quantity,
+    ->                      foreign key(p_id) references product(p_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int quantity,
+                     foreign key(p_id) references product(p_id))' at line 4
+mysql> create table contain(p_id int,o_id int,int quantity, foreign key(p_id) references product(p_id)); 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int quantity, foreign key(p_id) references product(p_id))' at line 1
+mysql> create table contain(p_id int,o_id int,quantity int, foreign key(p_id) references product(p_id));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> desc contain;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| p_id     | int(11) | YES  | MUL | NULL    |       |
+| o_id     | int(11) | YES  |     | NULL    |       |
+| quantity | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table contain add constraint foreign key(o_id) references ord(o_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> alter table contain add constraint foreign key(o_id) references ord(o_id);
+Query OK, 0 rows affected (0.62 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc contain;                                                            +----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| p_id     | int(11) | YES  | MUL | NULL    |       |
+| o_id     | int(11) | YES  | MUL | NULL    |       |
+| quantity | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table ord add column c_id int;
+Query OK, 0 rows affected (0.38 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table ord add constraint foreign key(c_id) references ord(c_id); 
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table ord add constraint foreign key(c_id) references ord(c_id);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> desc ord;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| o_id   | int(11) | NO   | PRI | NULL    |       |
+| o_date | date    | YES  |     | NULL    |       |
+| amount | int(11) | YES  |     | NULL    |       |
+| c_id   | int(11) | YES  |     | NULL    |       |
++--------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table ord add constraint foreign key(c_id) references ord(c_id);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> desc customer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| c_id   | int(11)     | NO   | PRI | NULL    |       |
+| c_name | varchar(20) | YES  |     | NULL    |       |
+| phone  | int(11)     | YES  |     | NULL    |       |
+| email  | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table ord add  foreign key(c_id) references ord(c_id);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table ord add constraint foreign key(c_id) references customer(c_id);
+Query OK, 0 rows affected (0.60 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc ord;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| o_id   | int(11) | NO   | PRI | NULL    |       |
+| o_date | date    | YES  |     | NULL    |       |
+| amount | int(11) | YES  |     | NULL    |       |
+| c_id   | int(11) | YES  | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table product add column cat_id int;
+Query OK, 0 rows affected (0.41 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table product add constraint foreign key(cat_id) references category(cat_id);
+Query OK, 0 rows affected (0.61 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc product;                                                          
+  +---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| p_id    | int(11)     | NO   | PRI | NULL    |       |
+| p_name  | varchar(20) | YES  |     | NULL    |       |
+| u_price | int(11)     | YES  |     | NULL    |       |
+| stock   | int(11)     | YES  |     | NULL    |       |
+| cat_id  | int(11)     | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc customer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| c_id   | int(11)     | NO   | PRI | NULL    |       |
+| c_name | varchar(20) | YES  |     | NULL    |       |
+| phone  | int(11)     | YES  |     | NULL    |       |
+| email  | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into customer values(101,"Niranjan",9422391312,"abc@gmai.com");
+ERROR 1264 (22003): Out of range value for column 'phone' at row 1
+mysql> alter table customer change phone phone varchar(12);
+Query OK, 0 rows affected (0.53 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc customer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| c_id   | int(11)     | NO   | PRI | NULL    |       |
+| c_name | varchar(20) | YES  |     | NULL    |       |
+| phone  | varchar(12) | YES  |     | NULL    |       |
+| email  | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into customer values(101,"Niranjan","9422391312","abc@gmai.com");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(102,"Jayesh","9472395318","abc123@gmai.com"); 
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into customer values(103,"sanket","9422335318","xyz123@gmai.com"); 
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(104,"swapnil","5522335318","pqr@gmai.com"); 
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(105,"manas","9922335318","manas@gmai.com"); 
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from customer;
++------+----------+------------+-----------------+
+| c_id | c_name   | phone      | email           |
++------+----------+------------+-----------------+
+|  101 | Niranjan | 9422391312 | abc@gmai.com    |
+|  102 | Jayesh   | 9472395318 | abc123@gmai.com |
+|  103 | sanket   | 9422335318 | xyz123@gmai.com |
+|  104 | swapnil  | 5522335318 | pqr@gmai.com    |
+|  105 | manas    | 9922335318 | manas@gmai.com  |
++------+----------+------------+-----------------+
+5 rows in set (0.00 sec)
+mysql> desc ord;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| o_id   | int(11) | NO   | PRI | NULL    |       |
+| o_date | date    | YES  |     | NULL    |       |
+| amount | int(11) | YES  |     | NULL    |       |
+| c_id   | int(11) | YES  | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into customer ord(1,'2019-3-3',555,3);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ord(1,'2019-3-3',555,3)' at line 1
+mysql> insert into ord(1,'2019-3-3',555,3);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'2019-3-3',555,3)' at line 1
+mysql> insert into ord(1,'2019-03-03',555,103);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'2019-03-03',555,103)' at line 1
+mysql> insert into ord values(1,'2019-03-03',555,103);
+Query OK, 1 row affected (0.04 sec)
+
+
+//on laptop
+
+
+sudo mysql -u root -p orde_db < order.sql
+Enter password: 
+niranjan@niranjan-HP:~$ sudo mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databses;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'databses' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| emp                |
+| mysql              |
+| orde_db            |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use orde_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
++------+------------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_orde_db |
++-------------------+
+| category          |
+| contain           |
+| customer          |
+| ord               |
+| product           |
++-------------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from customer;
++------+----------+------------+-----------------+
+| c_id | c_name   | phone      | email           |
++------+----------+------------+-----------------+
+|  101 | Niranjan | 9422391312 | abc@gmai.com    |
+|  102 | Jayesh   | 9472395318 | abc123@gmai.com |
+|  103 | sanket   | 9422335318 | xyz123@gmai.com |
+|  104 | swapnil  | 5522335318 | pqr@gmai.com    |
+|  105 | manas    | 9922335318 | manas@gmai.com  |
++------+----------+------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into ord values(2,'2019-04-12',342,104);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into ord values(3,'2019-04-17',344,104);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
+|    2 | 2019-04-12 |    342 |  104 |
+|    3 | 2019-04-17 |    344 |  104 |
++------+------------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into ord values(4,'2019-04-22',609,104);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
+|    2 | 2019-04-12 |    342 |  104 |
+|    3 | 2019-04-17 |    344 |  104 |
+|    4 | 2019-04-22 |    609 |  104 |
++------+------------+--------+------+
+4 rows in set (0.00 sec)
+
+mysql> insert into ord values(4,'2019-04-22',609,104);
+ERROR 1062 (23000): Duplicate entry '4' for key 'PRIMARY'
+mysql> insert into ord values(5,'2019-04-08',500,105);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
+|    2 | 2019-04-12 |    342 |  104 |
+|    3 | 2019-04-17 |    344 |  104 |
+|    4 | 2019-04-22 |    609 |  104 |
+|    5 | 2019-04-08 |    500 |  105 |
++------+------------+--------+------+
+5 rows in set (0.00 sec)
+
+mysql> desc product;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| p_id    | int(11)     | NO   | PRI | NULL    |       |
+| p_name  | varchar(20) | YES  |     | NULL    |       |
+| u_price | int(11)     | YES  |     | NULL    |       |
+| stock   | int(11)     | YES  |     | NULL    |       |
+| cat_id  | int(11)     | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into product values(1001,"pen",50,90,11);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`orde_db`.`product`, CONSTRAINT `product_ibfk_1` FOREIGN KEY (`cat_id`) REFERENCES `category` (`cat_id`))
+mysql> desc category;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| cat_id   | int(11)     | NO   | PRI | NULL    |       |
+| cat_name | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into category values(11,"pen");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into category values(11,"notebook");
+ERROR 1062 (23000): Duplicate entry '11' for key 'PRIMARY'
+mysql> insert into category values(12,"notebook");
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into category values(13,"scale");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into category values(14,"file");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into category values(15,"mobile");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from category;
++--------+----------+
+| cat_id | cat_name |
++--------+----------+
+|     11 | pen      |
+|     12 | notebook |
+|     13 | scale    |
+|     14 | file     |
+|     15 | mobile   |
++--------+----------+
+5 rows in set (0.00 sec)
+
+mysql> desc product;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| p_id    | int(11)     | NO   | PRI | NULL    |       |
+| p_name  | varchar(20) | YES  |     | NULL    |       |
+| u_price | int(11)     | YES  |     | NULL    |       |
+| stock   | int(11)     | YES  |     | NULL    |       |
+| cat_id  | int(11)     | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into product values(1001,"cello",50,90,11);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into product values(1002,"classmate",20,100,12);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into product values(1003,"IT",15,100,14);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into product values(1004,"camline",10,120,13);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into product values(1005,"Check & Mate",40,300,12);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select * from product;
++------+--------------+---------+-------+--------+
+| p_id | p_name       | u_price | stock | cat_id |
++------+--------------+---------+-------+--------+
+| 1001 | cello        |      50 |    90 |     11 |
+| 1002 | classmate    |      20 |   100 |     12 |
+| 1003 | IT           |      15 |   100 |     14 |
+| 1004 | camline      |      10 |   120 |     13 |
+| 1005 | Check & Mate |      40 |   300 |     12 |
++------+--------------+---------+-------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select  * from contain;
+Empty set (0.00 sec)
+
+mysql> desc contain;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| p_id     | int(11) | YES  | MUL | NULL    |       |
+| o_id     | int(11) | YES  | MUL | NULL    |       |
+| quantity | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+///
+Giving auto increment after table creation;
+ALTER TABLE ord MODIFY COLUMN o_id INT NOT NULL AUTO_INCREMENT;
+
+
+//auto increment after creation of table
+
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
+|    2 | 2019-04-12 |    342 |  104 |
+|    3 | 2019-04-17 |    344 |  104 |
+|    4 | 2019-04-22 |    609 |  104 |
+|    5 | 2019-04-08 |    500 |  105 |
+|    6 | 2019-07-11 |   8999 |  101 |
+|    7 | 2019-05-16 |  87675 |  103 |
++------+------------+--------+------+
+7 rows in set (0.00 sec)
+
+mysql> ALTER TABLE contain drop foreign key o_id;
+ERROR 1091 (42000): Can't DROP 'o_id'; check that column/key exists
+mysql> desc contain;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| p_id     | int(11) | YES  | MUL | NULL    |       |
+| o_id     | int(11) | YES  | MUL | NULL    |       |
+| quantity | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show create table contain;
++---------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                                                                                                                  |
++---------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| contain | CREATE TABLE `contain` (
+  `p_id` int(11) DEFAULT NULL,
+  `o_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  KEY `p_id` (`p_id`),
+  KEY `o_id` (`o_id`),
+  CONSTRAINT `contain_ibfk_1` FOREIGN KEY (`p_id`) REFERENCES `product` (`p_id`),
+  CONSTRAINT `contain_ibfk_2` FOREIGN KEY (`o_id`) REFERENCES `ord` (`o_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++---------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> ALTER TABLE contain drop foreign key contain_ibfk_2;
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE ord change COLUMN o_id INT AUTO_INCREMENT;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INT AUTO_INCREMENT' at line 1
+mysql> ALTER TABLE ord modify o_id INT AUTO_INCREMENT;
+Query OK, 7 rows affected (0.79 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> desc ord;
++--------+---------+------+-----+---------+----------------+
+| Field  | Type    | Null | Key | Default | Extra          |
++--------+---------+------+-----+---------+----------------+
+| o_id   | int(11) | NO   | PRI | NULL    | auto_increment |
+| o_date | date    | YES  |     | NULL    |                |
+| amount | int(11) | YES  |     | NULL    |                |
+| c_id   | int(11) | YES  | MUL | NULL    |                |
++--------+---------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> alter table contain add foreign key(o_id) references ord(o_id);
+Query OK, 0 rows affected (0.66 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc ord;
++--------+---------+------+-----+---------+----------------+
+| Field  | Type    | Null | Key | Default | Extra          |
++--------+---------+------+-----+---------+----------------+
+| o_id   | int(11) | NO   | PRI | NULL    | auto_increment |
+| o_date | date    | YES  |     | NULL    |                |
+| amount | int(11) | YES  |     | NULL    |                |
+| c_id   | int(11) | YES  | MUL | NULL    |                |
++--------+---------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> desc contain;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| p_id     | int(11) | YES  | MUL | NULL    |       |
+| o_id     | int(11) | YES  | MUL | NULL    |       |
+| quantity | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
+|    2 | 2019-04-12 |    342 |  104 |
+|    3 | 2019-04-17 |    344 |  104 |
+|    4 | 2019-04-22 |    609 |  104 |
+|    5 | 2019-04-08 |    500 |  105 |
+|    6 | 2019-07-11 |   8999 |  101 |
+|    7 | 2019-05-16 |  87675 |  103 |
++------+------------+--------+------+
+7 rows in set (0.00 sec)
+
+mysql> insert into ord values('2019-6-14',9800,104);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into ord(o_date,amount,c_id) values('2019-6-14',9800,104);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from ord;
++------+------------+--------+------+
+| o_id | o_date     | amount | c_id |
++------+------------+--------+------+
+|    1 | 2019-03-03 |    555 |  103 |
+|    2 | 2019-04-12 |    342 |  104 |
+|    3 | 2019-04-17 |    344 |  104 |
+|    4 | 2019-04-22 |    609 |  104 |
+|    5 | 2019-04-08 |    500 |  105 |
+|    6 | 2019-07-11 |   8999 |  101 |
+|    7 | 2019-05-16 |  87675 |  103 |
+|    8 | 2019-06-14 |   9800 |  104 |
++------+------------+--------+------+
+8 rows in set (0.00 sec)
+
+mysql> insert into ord values('2019-6-14',9800,104);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into ord(o_date,amount,c_id) values('2019-6-14',9800,104);
+
+
+
+
+//another one
+
+
+
+
+
+
+mysql> ALTER TABLE contain modify o_id INT AUTO_INCREMENT;
+ERROR 1832 (HY000): Cannot change column 'o_id': used in a foreign key constraint 'contain_ibfk_2'
+mysql> desc contain;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| p_id     | int(11) | YES  | MUL | NULL    |       |
+| o_id     | int(11) | YES  | MUL | NULL    |       |
+| quantity | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> ALTER TABLE contain drop foreign key contain_ibfk_2;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE contain modify o_id INT AUTO_INCREMENT;
+Query OK, 0 rows affected (0.69 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table contain add foreign key(o_id) references ord(o_id);
+Query OK, 0 rows affected (0.55 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc contain;
++----------+---------+------+-----+---------+----------------+
+| Field    | Type    | Null | Key | Default | Extra          |
++----------+---------+------+-----+---------+----------------+
+| p_id     | int(11) | YES  | MUL | NULL    |                |
+| o_id     | int(11) | NO   | MUL | NULL    | auto_increment |
+| quantity | int(11) | YES  |     | NULL    |                |
++----------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+
+//changing column position
+
+
+mysql> ALTER TABLE contain MODIFY p_id int AFTER o_id;
+Query OK, 0 rows affected (0.59 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc contain;
++----------+---------+------+-----+---------+----------------+
+| Field    | Type    | Null | Key | Default | Extra          |
++----------+---------+------+-----+---------+----------------+
+| o_id     | int(11) | NO   | MUL | NULL    | auto_increment |
+| p_id     | int(11) | YES  | MUL | NULL    |                |
+| quantity | int(11) | YES  |     | NULL    |                |
++----------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+
+**********selecting orders which is ordered from 1st of july*********************
+
+mysql> select * from ord where o_date>'2019-06-30';
++------+------------+------+
+| o_id | o_date     | c_id |
++------+------------+------+
+|    6 | 2019-07-11 |  101 |
+|    9 | 2019-07-11 |  105 |
+|   10 | 2019-07-11 |  103 |
++------+------------+------+
+3 rows in set (0.00 sec)
+
+
+mysql> select max(total) from contain;
++------------+
+| max(total) |
++------------+
+|     349500 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select o_id,max(total) from contain;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'myorder.contain.o_id'; this is incompatible with sql_mode=only_full_group_by
+mysql> select * from contain;
++------+------+----------+--------+
+| o_id | p_id | quantity | total  |
++------+------+----------+--------+
+|    1 | 1005 |       11 | 198000 |
+|    2 | 1006 |        1 |  12456 |
+|    3 | 1019 |        5 | 349500 |
+|    4 | 1019 |        3 | 209700 |
+|    5 | 1012 |        7 | 147000 |
++------+------+----------+--------+
+5 rows in set (0.00 sec)
+
+
+mysql> select * from contain,ord where contain.o_id=ord.o_id;
++------+------+----------+--------+------+------------+------+
+| o_id | p_id | quantity | total  | o_id | o_date     | c_id |
++------+------+----------+--------+------+------------+------+
+|    1 | 1005 |       11 | 198000 |    1 | 2019-03-03 |  103 |
+|    2 | 1006 |        1 |  12456 |    2 | 2019-04-12 |  104 |
+|    3 | 1019 |        5 | 349500 |    3 | 2019-04-17 |  104 |
+|    4 | 1019 |        3 | 209700 |    4 | 2019-04-22 |  104 |
+|    5 | 1012 |        7 | 147000 |    5 | 2019-04-08 |  105 |
++------+------+----------+--------+------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> select max(contain.total) from contain,ord where contain.o_id=ord.o_id;
++--------------------+
+| max(contain.total) |
++--------------------+
+|             349500 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select o_id,max(contain.total)as amount from contain,ord where contain.o_id=ord.o_id;
+ERROR 1052 (23000): Column 'o_id' in field list is ambiguous
+mysql> select contain.o_id,(select p_name from product where p_id=contain.p_id)as product_taken,(select * from customer where c_id=ord.c_id)as customer_name,max(contain.total)as amount from contain,ord where contain.o_id=ord.o_id;
+ERROR 1241 (21000): Operand should contain 1 column(s)
+mysql> select ord.o_id,max(contain.total)as amount from contain,ord where contain.o_id=ord.o_id;ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'myorder.ord.o_id'; this is incompatible with sql_mode=only_full_group_by
+mysql> select contain.o_id,max(contain.total)as amount from contain,ord where contain.o_id=ord.o_id;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'myorder.contain.o_id'; this is incompatible with sql_mode=only_full_group_by
+mysql> select o_id,max(total) from contain;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'myorder.contain.o_id'; this is incompatible with sql_mode=only_full_group_by
+mysql> select max(contain.total) from contain,ord where contain.o_id=ord.o_id;                                                                            
++--------------------+
+| max(contain.total) |
++--------------------+
+|             349500 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select p_id  from contain,ord where contain.o_id=ord.o_id;
++------+
+| p_id |
++------+
+| 1005 |
+| 1006 |
+| 1012 |
+| 1019 |
+| 1019 |
++------+
+5 rows in set (0.01 sec)
+
+mysql> select * from contain,ord where contain.o_id=ord.o_id;
++------+------+----------+--------+------+------------+------+
+| o_id | p_id | quantity | total  | o_id | o_date     | c_id |
++------+------+----------+--------+------+------------+------+
+|    1 | 1005 |       11 | 198000 |    1 | 2019-03-03 |  103 |
+|    2 | 1006 |        1 |  12456 |    2 | 2019-04-12 |  104 |
+|    3 | 1019 |        5 | 349500 |    3 | 2019-04-17 |  104 |
+|    4 | 1019 |        3 | 209700 |    4 | 2019-04-22 |  104 |
+|    5 | 1012 |        7 | 147000 |    5 | 2019-04-08 |  105 |
++------+------+----------+--------+------+------------+------+
+5 rows in set (0.01 sec)
+
+mysql> select * from contain,ord where contain.o_id=ord.o_id and total=max(total);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select max(contain.total) from contain,ord where contain.o_id=ord.o_id;
++--------------------+
+| max(contain.total) |
++--------------------+
+|             349500 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> (select max(contain.total) from contain,ord where contain.o_id=ord.o_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select * from (select max(contain.total) from contain,ord where contain.o_id=ord.o_id);
+ERROR 1248 (42000): Every derived table must have its own alias
+
+mysql> select * from contain,ord where total=(select max(contain.total) from contain,ord where contain.o_id=ord.o_id);
++------+------+----------+--------+------+------------+------+
+| o_id | p_id | quantity | total  | o_id | o_date     | c_id |
++------+------+----------+--------+------+------------+------+
+|    3 | 1019 |        5 | 349500 |    1 | 2019-03-03 |  103 |
+|    3 | 1019 |        5 | 349500 |    2 | 2019-04-12 |  104 |
+|    3 | 1019 |        5 | 349500 |    3 | 2019-04-17 |  104 |
+|    3 | 1019 |        5 | 349500 |    4 | 2019-04-22 |  104 |
+|    3 | 1019 |        5 | 349500 |    5 | 2019-04-08 |  105 |
+|    3 | 1019 |        5 | 349500 |    6 | 2019-07-11 |  101 |
+|    3 | 1019 |        5 | 349500 |    7 | 2019-05-16 |  103 |
+|    3 | 1019 |        5 | 349500 |    8 | 2019-06-14 |  104 |
+|    3 | 1019 |        5 | 349500 |    9 | 2019-07-11 |  105 |
+|    3 | 1019 |        5 | 349500 |   10 | 2019-07-11 |  103 |
++------+------+----------+--------+------+------------+------+
+10 rows in set (0.00 sec)
+
+mysql> select * from contain,ord where total=(select max(contain.total) from contain,ord,customer where contain.o_id=ord.o_id and ord.c_id=customer.c_id);
++------+------+----------+--------+------+------------+------+
+| o_id | p_id | quantity | total  | o_id | o_date     | c_id |
++------+------+----------+--------+------+------------+------+
+|    3 | 1019 |        5 | 349500 |    1 | 2019-03-03 |  103 |
+|    3 | 1019 |        5 | 349500 |    2 | 2019-04-12 |  104 |
+|    3 | 1019 |        5 | 349500 |    3 | 2019-04-17 |  104 |
+|    3 | 1019 |        5 | 349500 |    4 | 2019-04-22 |  104 |
+|    3 | 1019 |        5 | 349500 |    5 | 2019-04-08 |  105 |
+|    3 | 1019 |        5 | 349500 |    6 | 2019-07-11 |  101 |
+|    3 | 1019 |        5 | 349500 |    7 | 2019-05-16 |  103 |
+|    3 | 1019 |        5 | 349500 |    8 | 2019-06-14 |  104 |
+|    3 | 1019 |        5 | 349500 |    9 | 2019-07-11 |  105 |
+|    3 | 1019 |        5 | 349500 |   10 | 2019-07-11 |  103 |
++------+------+----------+--------+------+------------+------+
+10 rows in set (0.00 sec)
+
+mysql> select * from contain where total=(select max(contain.total) from contain,ord,customer where contain.o_id=ord.o_id and ord.c_id=customer.c_id);
++------+------+----------+--------+
+| o_id | p_id | quantity | total  |
++------+------+----------+--------+
+|    3 | 1019 |        5 | 349500 |
++------+------+----------+--------+
+1 row in set (0.01 sec)
+
+************* the details of order which is high total amount*****************
+
+mysql> select * from contain where total=(select max(contain.total) from contain,ord where contain.o_id=ord.o_id);
++------+------+----------+--------+
+| o_id | p_id | quantity | total  |
++------+------+----------+--------+
+|    3 | 1019 |        5 | 349500 |
++------+------+----------+--------+
+1 row in set (0.01 sec)
+
+mysql> select * from contain,ord where total=(select max(contain.total) from contain,ord where contain.o_id=ord.o_id);
++------+------+----------+--------+------+------------+------+
+| o_id | p_id | quantity | total  | o_id | o_date     | c_id |
++------+------+----------+--------+------+------------+------+
+|    3 | 1019 |        5 | 349500 |    1 | 2019-03-03 |  103 |
+|    3 | 1019 |        5 | 349500 |    2 | 2019-04-12 |  104 |
+|    3 | 1019 |        5 | 349500 |    3 | 2019-04-17 |  104 |
+|    3 | 1019 |        5 | 349500 |    4 | 2019-04-22 |  104 |
+|    3 | 1019 |        5 | 349500 |    5 | 2019-04-08 |  105 |
+|    3 | 1019 |        5 | 349500 |    6 | 2019-07-11 |  101 |
+|    3 | 1019 |        5 | 349500 |    7 | 2019-05-16 |  103 |
+|    3 | 1019 |        5 | 349500 |    8 | 2019-06-14 |  104 |
+|    3 | 1019 |        5 | 349500 |    9 | 2019-07-11 |  105 |
+|    3 | 1019 |        5 | 349500 |   10 | 2019-07-11 |  103 |
++------+------+----------+--------+------+------------+------+
+10 rows in set (0.01 sec)
+
+mysql> select * from (select max(contain.total) from contain,ord where contain.o_id=ord.o_id) as jjj;
++--------------------+
+| max(contain.total) |
++--------------------+
+|             349500 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select *  from contain,ord where contain.o_id=ord.o_id and total=(select max(contain.total) from contain,ord where contain.o_id=ord.o_id);
++------+------+----------+--------+------+------------+------+
+| o_id | p_id | quantity | total  | o_id | o_date     | c_id |
++------+------+----------+--------+------+------------+------+
+|    3 | 1019 |        5 | 349500 |    3 | 2019-04-17 |  104 |
++------+------+----------+--------+------+------------+------+
+1 row in set (0.01 sec)
+
+mysql> select contain.o_id,(select p_name from product where contain.p_id=p_id)as product,(select c_name from customer where c_id=ord.c_id)as customer,total from contain,ord where contain.o_id=ord.o_id and total=(select max(contain.total) from contain,ord where contain.o_id=ord.o_id);
++------+---------+----------+--------+
+| o_id | product | customer | total  |
++------+---------+----------+--------+
+|    3 | LG      | swapnil  | 349500 |
++------+---------+----------+--------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select * from (select contain.total from contain,ord where contain.o_id=ord.o_id);
+ERROR 1248 (42000): Every derived table must have its own alias
+mysql> select * from (select max(contain.total) from contain,ord where contain.o_id=ord.o_id) as jjj;
++--------------------+
+| max(contain.total) |
++--------------------+
+|             349500 |
++--------------------+
+1 row in set (0.00 sec)
+
+************* the details of order which is low total amount*****************
+
+mysql> select * from contain where total=(select min(contain.total) from contain,ord where contain.o_id=ord.o_id);
++------+------+----------+-------+
+| o_id | p_id | quantity | total |
++------+------+----------+-------+
+|    2 | 1006 |        1 | 12456 |
++------+------+----------+-------+
+1 row in set (0.00 sec)
+

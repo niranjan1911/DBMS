@@ -1,0 +1,139 @@
+Get the total no of customers.
+
+ select count(*) from customer;
++----------+
+| count(*) |
++----------+
+|        7 |
++----------+
+1 row in set (0.00 sec)
+
+Display average purchase amount of all the customers/products.
+
+mysql> select (select p_name from product where product.p_id=contain.p_id)as product,avg(total) from contain group by p_id;
++---------+-------------+
+| product | avg(total)  |
++---------+-------------+
+| Toshiba | 198000.0000 |
+| Dell    |  12456.0000 |
+| Haier   | 147000.0000 |
+| LG      | 279600.0000 |
++---------+-------------+
+
+Display total purchase amount of all the customers.
+
+mysql> update ord set amount=(select sum(total) from contain where contain.o_id=ord.o_id);
+Query OK, 9 rows affected (0.03 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+mysql> select * from ord;
++------+------------+------+--------+
+| o_id | o_date     | c_id | amount |
++------+------------+------+--------+
+|    2 | 2019-04-12 |  104 | 222912 |
+|    3 | 2019-04-17 |  104 | 236700 |
+|    4 | 2019-04-22 |  104 | 108000 |
+|    5 | 2019-04-08 |  105 | 349500 |
+|    6 | 2019-07-11 |  101 |  90000 |
+|    7 | 2019-05-16 |  103 | 209700 |
+|    8 | 2019-06-14 |  104 | 148140 |
+|    9 | 2019-07-11 |  105 | 144056 |
+|   10 | 2019-07-11 |  103 |  83300 |
++------+------------+------+--------+
+9 rows in set (0.00 sec)
+
+
+Find DAYNAME, MONTHNAME and YEAR of the
+purchase order made on “1995-11-20”
+
+mysql> select year(o_date) from ord where o_date='2019-04-12';
++--------------+
+| year(o_date) |
++--------------+
+|         2019 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select day(o_date) from ord where o_date='2019-04-12';
++-------------+
+| day(o_date) |
++-------------+
+|          12 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select month(o_date) from ord where o_date='2019-04-12';
++---------------+
+| month(o_date) |
++---------------+
+|             4 |
++---------------+
+1 row in set (0.00 sec)
+
+Get current date & time, current time, current date
+
+mysql> select now();
++---------------------+
+| now()               |
++---------------------+
+| 2019-07-31 17:46:18 |
++---------------------+
+1 row in set (0.02 sec)
+
+mysql> select current_date();
++----------------+
+| current_date() |
++----------------+
+| 2019-07-31     |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select current_time();
++----------------+
+| current_time() |
++----------------+
+| 17:48:08       |
++----------------+
+1 row in set (0.00 sec)
+
+Get 6 month future & past date using interval function based on current date and
+name the column accordingly.
+
+mysql> select now() + interval 6 month as future;
++---------------------+
+| future              |
++---------------------+
+| 2020-01-31 18:00:59 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select now() - interval 6 month as future;
++---------------------+
+| future              |
++---------------------+
+| 2019-01-31 18:01:11 |
++---------------------+
+1 row in set (0.00 sec)
+
+Find purchase details of the customers group by product category.
+
+mysql> select contain.o_id,(select c_name from customer where c_id=(select c_id from ord where ord.o_id=contain.o_id))as customer_id,(select cat_name from category where category.cat_id=product.cat_id)as category,product.p_name,contain.quantity,contain.total from contain,product where contain.p_id=product.p_id order by category;
++------+-------------+----------------+-----------+----------+--------+
+| o_id | customer_id | category       | p_name    | quantity | total  |
++------+-------------+----------------+-----------+----------+--------+
+|    9 | manas       | Laptop         | Dell      |        1 |  12456 |
+|    4 | swapnil     | Laptop         | HP        |        9 | 108000 |
+|    2 | swapnil     | Laptop         | Dell      |        2 |  24912 |
+|    3 | swapnil     | Mobile         | Apple     |        3 |  89700 |
+|   10 | sanket      | Mobile         | MI        |       17 |  83300 |
+|    5 | manas       | TV             | LG        |        5 | 349500 |
+|    7 | sanket      | TV             | LG        |        3 | 209700 |
+|    2 | swapnil     | TV             | Toshiba   |       11 | 198000 |
+|    9 | manas       | TV             | Redmi     |        4 | 131600 |
+|    6 | Niranjan    | Wahing Machine | panasonic |        5 |  90000 |
+|    8 | swapnil     | Wahing Machine | LG        |       12 | 148140 |
+|    3 | swapnil     | Wahing Machine | Haier     |        7 | 147000 |
++------+-------------+----------------+-----------+----------+--------+
+12 rows in set (0.00 sec)
+ 
+

@@ -1,0 +1,302 @@
+create database hotel;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use hotel;
+Database changed
+mysql> create table chef(ssn int,c_name varchar(20),speciality varchar (20),phone int);
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> desc hotel;                                                              ERROR 1146 (42S02): Table 'hotel.hotel' doesn't exist
+mysql> drop table chef;
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> create table hotel(ssn int,c_name varchar(20),speciality varchar (20),phone int);
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> desc hotel;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | YES  |     | NULL    |       |
+| c_name     | varchar(20) | YES  |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table hotel add auto increment(ssn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'increment(ssn)' at line 1
+mysql> alter table hotel add primary key(ssn);
+Query OK, 0 rows affected (0.36 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc hotel;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | NO   | PRI | NULL    |       |
+| c_name     | varchar(20) | YES  |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table hotel add not null(c_name);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null(c_name)' at line 1
+ 
+ 
+ 
+mysql>use hotel
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> desc hotel
+    -> ;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | NO   | PRI | NULL    |       |
+| c_name     | varchar(20) | YES  |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table hotel change c_name c_name varchar(20) not null;
+Query OK, 0 rows affected (0.37 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc hotel;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | NO   | PRI | NULL    |       |
+| c_name     | varchar(20) | NO   |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table hotel change c_name chef_name varchar(20) not null;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc hotel;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | NO   | PRI | NULL    |       |
+| chef_name  | varchar(20) | NO   |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table hotel modify chef_name chef_name varchar(20) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'chef_name varchar(20) not null' at line 1
+mysql> create table resto(id int,name varchar(20),address varchar(20));
+Query OK, 0 rows affected (0.36 sec)
+
+mysql> desc resto;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | YES  |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table resto alter column id auto_increment;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'auto_increment' at line 1
+mysql> alter table resto alter column id AUTO_INCREMENT;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AUTO_INCREMENT' at line 1
+mysql> alter table resto add constraint id auto_increment;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'auto_increment' at line 1
+mysql> alter table resto modify column id int auto_increment;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> desc resto;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | YES  |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table resto modify column id int auto_increment;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> alter table resto modify column id int primary key;
+Query OK, 0 rows affected (0.40 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc resto;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table resto add column fk int;
+Query OK, 0 rows affected (0.42 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc resto;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
+| fk      | int(11)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table resto drop column fk int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int' at line 1
+mysql> alter table resto delete column fk int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delete column fk int' at line 1
+mysql> alter table resto drop fk;
+Query OK, 0 rows affected (0.40 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc resto;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table resto add constraint fk_resto foreign key(ssn) refernces chef(ssn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces chef(ssn)' at line 1
+mysql> ALTER TABLE Orders
+    ->        >ADD CONSTRAINT fk_PerOrders
+    ->        >FOREIGN KEY (P_Id)
+    ->        >REFERENCES chef(ssn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '       >ADD CONSTRAINT fk_PerOrders
+       >FOREIGN KEY (P_Id)
+  ' at line 2
+mysql> ALTER TABLE resto ADD CONSTRAINT fk_oo FOREIGN KEY (ssn) REFERENCES chef(ssn);
+ERROR 1072 (42000): Key column 'ssn' doesn't exist in table
+mysql> ALTER TABLE resto ADD CONSTRAINT fk_oo FOREIGN KEY(id) REFERENCES chef(ssn);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> ALTER TABLE resto ADD CONSTRAINT fk_oo FOREIGN KEY(name) REFERENCES chef(ssn);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> ALTER TABLE resto ADD CONSTRAINT FOREIGN KEY(name) REFERENCES chef(ssn); ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table resto add column fk_resto int;
+Query OK, 0 rows affected (0.42 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc resto;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| id       | int(11)     | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| address  | varchar(20) | YES  |     | NULL    |       |
+| fk_resto | int(11)     | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE resto ADD CONSTRAINT FOREIGN KEY(fk_resto) REFERENCES chef(ssn);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> ALTER TABLE resto ADD CONSTRAINT fk FOREIGN KEY(fk_resto) REFERENCES chef(ssn);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> desc chef;
+ERROR 1146 (42S02): Table 'hotel.chef' doesn't exist
+mysql> show tables;
++-----------------+
+| Tables_in_hotel |
++-----------------+
+| hotel           |
+| resto           |
++-----------------+
+2 rows in set (0.01 sec)
+
+mysql> desc hotel;;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | NO   | PRI | NULL    |       |
+| chef_name  | varchar(20) | NO   |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> alter table hotel rename chef;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> desc chef;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ssn        | int(11)     | NO   | PRI | NULL    |       |
+| chef_name  | varchar(20) | NO   |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| phone      | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE resto ADD CONSTRAINT FOREIGN KEY(fk_resto) REFERENCES chef(ssn);
+Query OK, 0 rows affected (0.60 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc resto;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| id       | int(11)     | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| address  | varchar(20) | YES  |     | NULL    |       |
+| fk_resto | int(11)     | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE resto ADD CONSTRAINT FOREIGN KEY(fk_resto) REFERENCES chef(ssn);
+
+mysql> create table work(chef_ssn int,reso_name varchar(20),resto_add varchar(20),foreign key(chef_ssn) references chef(ssn));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> desc work;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| chef_ssn  | int(11)     | YES  | MUL | NULL    |       |
+| reso_name | varchar(20) | YES  |     | NULL    |       |
+| resto_add | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> alter table work add primary key(chef_name,reso_name);
+ERROR 1072 (42000): Key column 'chef_name' doesn't exist in table
+mysql> alter table work add primary key(chef_ssn,reso_name);
+Query OK, 0 rows affected (0.40 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc work;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| chef_ssn  | int(11)     | NO   | PRI | NULL    |       |
+| reso_name | varchar(20) | NO   | PRI | NULL    |       |
+| resto_add | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> 
+

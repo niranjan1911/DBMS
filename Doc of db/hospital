@@ -1,0 +1,68 @@
+~$ sudo mysql -u Niranjan -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| assign4            |
+| emp                |
+| foodhub            |
+| medical            |
+| mysql              |
+| performance_schema |
+| student            |
+| studio             |
+| sys                |
+| testdb             |
++--------------------+
+11 rows in set (0.03 sec)
+
+mysql> create database hospital;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use database hospital;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use hospital;
+Database changed
+mysql> create table patient(adhar_p int primary key,p_name varchar(20),address varchar (30),age int);
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> desc patient;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| adhar_p | int(11)     | NO   | PRI | NULL    |       |
+| p_name  | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(30) | YES  |     | NULL    |       |
+| age     | int(11)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> create table doctor(adhar_d int primary key,d_name varchar(20),speciality varchar (20),exp int);
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> desc doctor;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| adhar_d    | int(11)     | NO   | PRI | NULL    |       |
+| d_name     | varchar(20) | YES  |     | NULL    |       |
+| speciality | varchar(20) | YES  |     | NULL    |       |
+| exp        | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+
