@@ -1,0 +1,122 @@
+1. Revoked all previledges:
+     
+   mysql> use emp;
+   ERROR 1044 (42000): Access denied for user 'root'@'10.10.12.254' to database 'emp'
+
+2. Granted select operation:
+
+        mllab-23@mllab23:~$ sudo mysql -u root -p -h 10.10.11.27
+	Enter password: 
+	Welcome to the MySQL monitor.  Commands end with ; or \g.
+	Your MySQL connection id is 5
+	Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+	Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+	Oracle is a registered trademark of Oracle Corporation and/or its
+	affiliates. Other names may be trademarks of their respective
+	owners.
+
+	Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+	mysql> show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| information_schema |
+	| student            |
+	+--------------------+
+	2 rows in set (0.00 sec)
+
+	mysql> show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| information_schema |
+	| student            |
+	+--------------------+
+	2 rows in set (0.00 sec)
+
+	mysql> use student;
+	Reading table information for completion of table and column names
+	You can turn off this feature to get a quicker startup with -A
+
+	Database changed
+	mysql> show tables;
+	+-------------------+
+	| Tables_in_student |
+	+-------------------+
+	| info              |
+	| my                |
+	| stud              |
+	+-------------------+
+	3 rows in set (0.00 sec)
+
+	mysql> select * from info;
+	+---------+----------+-------+
+	| roll_no | name     | marks |
+	+---------+----------+-------+
+	|       1 | sanket   |  99.9 |
+	|       2 | Niranjan |  99.9 |
+	|       3 | swapnil  |    66 |
+	|       4 | manas    |    56 |
+	+---------+----------+-------+
+	4 rows in set (0.00 sec)
+	mysql> drop info;
+	ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 		near 'info' at line 1
+   3. grant insert on emp.info:
+   
+      	mysql> select * from info;
+	ERROR 1142 (42000): SELECT command denied to user 'root'@'10.10.12.254' for table 'info'
+	
+	mysql> insert into info values(1,'niranjan');
+	Query OK, 1 row affected (0.02 sec)
+	
+   4.grant delete on emp.info:
+     
+        mysql> select * from info;
+	+------+----------+
+	| id   | name     |
+	+------+----------+
+	|    1 | jayesh   |
+	|    2 | niranjan |
+	|    3 | sanket   |
+	|    1 | niranjan |
+	+------+----------+
+	4 rows in set (0.00 sec)
+
+	mysql> delete from info where id=1;
+	Query OK, 2 rows affected (0.03 sec)
+
+	mysql> select * from info;
+	+------+----------+
+	| id   | name     |
+	+------+----------+
+	|    2 | niranjan |
+	|    3 | sanket   |
+	+------+----------+
+	2 rows in set (0.00 sec)
+	
+	mysql> drop info;
+	ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 		near 'info' at line 1
+	
+   5 grant update on emp.info:
+      
+        mysql> update info set id=12 where id=2;
+	Query OK, 1 row affected (0.04 sec)
+	Rows matched: 1  Changed: 1  Warnings: 0
+
+	mysql> select * from info
+	    -> ;
+	+------+----------+
+	| id   | name     |
+	+------+----------+
+	|   12 | niranjan |
+	|    3 | sanket   |
+	+------+----------+
+	2 rows in set (0.00 sec)
+
+	mysql> 
+
+
+

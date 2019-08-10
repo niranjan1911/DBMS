@@ -1,0 +1,174 @@
+mllab24@mllab24:/etc/mysql/mysql.conf.d$ sudo gedit mysqld.cnf
+[sudo] password for mllab24: 
+
+
+mllab24@mllab24:/$ sudo mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+5 rows in set (0.04 sec)
+
+mysql> create database emp;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use emp;
+Database changed
+mysql> create table info(id int,name varchar(10));
+Query OK, 0 rows affected (0.22 sec)
+
+mysql> insert into info values(1,"jayesh");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into info values(2,"niranjan");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into info values(3,"sanket");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from info;
++------+----------+
+| id   | name     |
++------+----------+
+|    1 | jayesh   |
+|    2 | niranjan |
+|    3 | sanket   |
++------+----------+
+3 rows in set (0.00 sec)
+
+
+[1]+  Stopped                 sudo mysql -u root -p
+mllab24@mllab24:/$ sudo mysql service restart
+[sudo] password for mllab24: 
+mysql  Ver 14.14 Distrib 5.7.26, for Linux (x86_64) using  EditLine wrapper
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+
+mllab24@mllab24:/$ sudo mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6
+Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases
+    -> show databases;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'show databases' at line 2
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| emp                |
+| mysql              |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+
+-----granting all tables of all databases
+
+mysql> grant all on *.* to root@'10.10.12.254' identified by 'pict123';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> 
+[2]+  Stopped                 sudo mysql -u root -p
+mllab24@mllab24:/$ sudo service mysql  restart
+mllab24@mllab24:/$ sudo mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.7.26-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| emp                |
+| mysql              |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+-----revoking all granted services
+
+mysql> REVOKE ALl ON *.* FROM root@'10.10.12.254';
+Query OK, 0 rows affected (0.00 sec)
+
+-----granted select  on specified database
+mysql> grant select ON  student.* to root@'10.10.12.254' identified by '123';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+-----revoking select specified database
+mysql> REVOKE select ON student.* FROM root@'10.10.12.254';
+Query OK, 0 rows affected (0.00 sec)
+
+------grant for inseretion
+mysql> grant insert on emp.* to root@'10.10.12.254' identified by '123';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+
+
+mysql> grant select on emp.* to root@'10.10.12.254';
+Query OK, 0 rows affected (0.00 sec)
+
+------granted for deletion
+
+mysql> grant delete on emp.* to root@'10.10.12.254';
+Query OK, 0 rows affected (0.00 sec)
+
+
+
+mysql> grant delete on emp.* to root@'10.10.12.254';
+Query OK, 0 rows affected (0.00 sec)
+
+-----granted for updatation
+
+mysql> grant update on emp.* to root@'10.10.12.254';
+Query OK, 0 rows affected (0.00 sec)
+
+
+
